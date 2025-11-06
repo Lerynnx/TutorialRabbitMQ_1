@@ -7,13 +7,32 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Componente receptor de mensajes desde RabbitMQ.
+ *
+ * Esta clase usa @RabbitListener para suscribirse a la cola "hello" y
+ * varios métodos anotados con @RabbitHandler para delegar según el tipo
+ * de payload recibido:
+ * - String: cuando el mensaje se entrega como texto
+ * - Usuario: cuando el MessageConverter ya ha deserializado a la clase
+ * - byte[]: fallback para mensajes que lleguen como bytes sin headers
+ *
+ * El receptor es tolerante: intenta convertir Strings JSON a Usuario y
+ * en caso de recibir bytes intenta decodificarlos como UTF-8 y parsearlos.
+ */
 @Component
 @RabbitListener(queues = "hello")
 public class Receiver {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Caso: el convertidor/producer ha enviado un String simple
+    /**
+     * Manejador para payloads de tipo String.
+     * Si el contenido String contiene JSON que corresponde a Usuario, se
+     * intenta deserializar y delegar al manejador de Usuario.
+     *
+     * @param in payload recibido como String
+     */
     @RabbitHandler
     public void receiveString(String in) {
         // Intento de deserializar si el String es JSON que corresponde a Usuario
@@ -27,14 +46,22 @@ public class Receiver {
         System.out.println("[x] Received String: '" + in + "'");
     }
 
-    // Caso: el message converter ya ha convertido directamente a Usuario
+    /**
+     * Manejador para payloads ya deserializados a Usuario por el convertidor.
+     *
+     * @param usuario instancia de Usuario deserializada
+     */
     @RabbitHandler
     public void receiveUsuario(Usuario usuario) {
         handleUsuario(usuario);
     }
 
-    // Fallback: si el mensaje llega como un array de bytes (por ejemplo producer envía raw bytes)
-    // intentamos convertirlo a UTF-8 String y luego parsearlo como JSON a Usuario.
+    /**
+     * Fallback para mensajes recibidos como raw byte[]. Intenta convertir a UTF-8
+     * y parsear JSON a Usuario; si falla, trata los bytes como texto.
+     *
+     * @param body payload en bytes
+     */
     @RabbitHandler
     public void receiveBytes(byte[] body) {
         if (body == null || body.length == 0) {
@@ -54,24 +81,29 @@ public class Receiver {
         System.out.println("[x] Received byte[] could not be parsed as Usuario; treating as text: '" + payload + "'");
     }
 
-    // Manejo centralizado del objeto Usuario
+    /**
+     * Manejo centralizado del objeto Usuario (lógica de negocio mínima de ejemplo).
+     *
+     * @param usuario objeto Usuario ya validado/deserializado
+     */
     private void handleUsuario(Usuario usuario) {
         System.out.println("[x] Received JSON usuario: id=" + usuario.getId()
                 + ", nombre=" + usuario.getNombre());
         // lógica adicional...
     }
 
-    // Intento seguro de parsear String JSON a Usuario, devuelve null si falla
+    /**
+     * Intenta parsear un String JSON a Usuario. Devuelve null si falla.
+     *
+     * @param payload String que puede representar un JSON de Usuario
+     * @return Usuario si el parseo es correcto; null en caso contrario
+     */
     private Usuario tryParseUsuario(String payload) {
-        // Si el payload viene como bytes convertidos a String con un Charset distinto,
-        // asegúrate de que el producer use UTF-8; aquí asumimos UTF-8/normal.
         try {
-            // Opcional: recortar espacios
             String trimmed = payload != null ? payload.trim() : null;
             if (trimmed == null || trimmed.isEmpty()) {
                 return null;
             }
-            // Intentar parseo
             return objectMapper.readValue(trimmed, Usuario.class);
         } catch (JsonProcessingException | IllegalArgumentException e) {
             // No es JSON válido o no corresponde a Usuario

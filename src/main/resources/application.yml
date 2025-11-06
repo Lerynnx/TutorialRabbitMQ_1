@@ -1,7 +1,12 @@
+# Archivo de configuración de Spring Boot (application.yml)
+
 spring:
   profiles:
+    # Perfil activo por defecto. En este proyecto se usa "usage_message" para
+    # mostrar instrucciones en lugar de ejecutar el tutorial completo.
     active: usage_message
   rabbitmq:
+    # Ajustes de conexión a RabbitMQ.
     host: localhost
     port: 5672
     username: guest
@@ -9,8 +14,12 @@ spring:
 
 logging:
   level:
+    # Nivel de logging para el paquete org (reduce ruido en consola)
     org: ERROR
 
+# Propiedades específicas del tutorial usadas por TutorialRabbitMqRunner
 tutorial:
   client:
+    # Duración (ms) que el runner mantiene la aplicación en ejecución antes
+    # de cerrarla automáticamente; por defecto 10000 ms (10 segundos) en el ejemplo.
     duration: 10000
