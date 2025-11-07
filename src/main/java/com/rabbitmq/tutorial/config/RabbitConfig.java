@@ -1,4 +1,4 @@
-package com.rabbitmq.tutorial;
+package com.rabbitmq.tutorial.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,7 @@
-package com.rabbitmq.tutorial;
+package com.rabbitmq.tutorial.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.tutorial.model.Usuario;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Component;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -89,7 +90,6 @@ public class Receiver {
     private void handleUsuario(Usuario usuario) {
         System.out.println("[x] Received JSON usuario: id=" + usuario.getId()
                 + ", nombre=" + usuario.getNombre());
-        // lógica adicional...
     }
 
     /**

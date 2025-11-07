@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.rabbitmq.tutorial.runner.TutorialRabbitMqRunner;
+
 /**
- * Clase principal de arranque de la aplicación de ejemplo RabbitMQ.
+ * Clase principal de arranque de la aplicación.
  *
  * Contiene el método main y algunos beans de ayuda para mostrar mensajes
  * de uso y ejecutar el runner del tutorial. Se habilita el soporte de
@@ -20,17 +22,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class TutorialRabbitMqApplication {
 
     /**
-     * Bean que se activa únicamente con el perfil "usage_message" y muestra
-     * instrucciones de uso en la salida estándar. Útil para ejecutar la
-     * aplicación en modo informativo sin iniciar el tutorial.
+     * Bean que se activa únicamente si no se incluyen los argumentos necesarios
      */
     @Profile("usage_message")
     @Bean
     CommandLineRunner usage() {
         return args -> {
-            System.out.println("This app uses Spring Profiles to control its behavior.\n");
-            System.out.println("Sample usage: java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
-            System.out.println("And then: java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,reciever");
+            System.out.println("Forma de ejecutar la aplicación:");
+            System.out.println("java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
         };
     }
 

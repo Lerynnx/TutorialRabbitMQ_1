@@ -1,4 +1,4 @@
-package com.rabbitmq.tutorial;
+package com.rabbitmq.tutorial.messaging;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.tutorial.model.Usuario;
 
 /**
  * Componente que envía mensajes a la cola RabbitMQ.
