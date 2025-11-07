@@ -23,3 +23,6 @@ tutorial:
     # Duración (ms) que el runner mantiene la aplicación en ejecución antes
     # de cerrarla automáticamente; por defecto 10000 ms (10 segundos) en el ejemplo.
     duration: 10000
+    # Retardo (ms) que el sender aplicará al header x-delay cuando publique
+    # mensajes a la exchange delayed.exchange. Se puede ajustar aquí.
+    delayMs: 5000
