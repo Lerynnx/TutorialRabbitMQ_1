@@ -1,12 +1,14 @@
-package com.rabbitmq.tutorial;
+package com.rabbitmq.tutorial.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.rabbitmq.tutorial.messaging.Receiver;
+import com.rabbitmq.tutorial.messaging.Sender;
+
 /**
- * Configuración de ejemplo usada en los tutoriales.
  *
  * Esta clase define beans específicos para los perfiles de ejemplo
  * "tutorial" y "hello-world". Proporciona una cola llamada "hello"

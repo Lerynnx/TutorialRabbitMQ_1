@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.rabbitmq.tutorial.runner.TutorialRabbitMqRunner;
+
 /**
- * Clase principal de arranque de la aplicación de ejemplo RabbitMQ.
+ * Clase principal de arranque de la aplicación.
  *
  * Contiene el método main y algunos beans de ayuda para mostrar mensajes
  * de uso y ejecutar el runner del tutorial. Se habilita el soporte de

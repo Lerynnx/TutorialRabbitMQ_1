@@ -23,3 +23,8 @@ tutorial:
     # Duración (ms) que el runner mantiene la aplicación en ejecución antes
     # de cerrarla automáticamente; por defecto 10000 ms (10 segundos) en el ejemplo.
     duration: 10000
+    # Nombre de la cola que usa el Receiver (por defecto "hello").
+    queue: hello
+    # Timeout en ms que usa el Receiver al intentar recibir un mensaje.
+    # Si se establece a 0 se intenta recibir sin espera (instantáneo).
+    receiveTimeout: 2000

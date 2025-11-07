@@ -1,4 +1,4 @@
-package com.rabbitmq.tutorial;
+package com.rabbitmq.tutorial.model;
 
 /**
  * Entidad simple que representa un usuario en los ejemplos del tutorial.
