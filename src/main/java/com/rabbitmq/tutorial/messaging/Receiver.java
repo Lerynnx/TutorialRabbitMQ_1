@@ -7,13 +7,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Componente receptor de mensajes desde RabbitMQ que trabaja con Transaccion.
- * Ya no introduce un retardo en el cliente: ahora se confía en el retardo broker-side
- * configurado mediante la cola `hello_delay` (TTL + DLX).
+ * Receptor de mensajes de RabbitMQ (activo solo con el perfil 'receiver').
+ *
+ * Procesa mensajes de la cola "hello". Acepta payloads como JSON (string/bytes)
+ * o como instancias ya deserializadas de Transaccion.
  */
+@Profile("receiver")
 @Component
 @RabbitListener(queues = "hello")
 public class Receiver {
@@ -30,14 +33,11 @@ public class Receiver {
      */
     @RabbitHandler
     public void receiveString(String in) {
-        // Intento de deserializar si el String es JSON que corresponde a Transaccion
         Transaccion maybe = tryParseTransaccion(in);
         if (maybe != null) {
             handleTransaccion(maybe);
             return;
         }
-
-        // Si no es JSON/Transaccion, tratar como texto plano
         System.out.println("[x] Received String: '" + in + "'");
     }
 
@@ -64,15 +64,12 @@ public class Receiver {
             return;
         }
         String payload = new String(body, StandardCharsets.UTF_8).trim();
-        // Primero imprimimos info mínima y el payload
         System.out.println("[x] Received byte[] payload as String: '" + payload + "'");
-        // Intentamos parsear a Transaccion
         Transaccion maybe = tryParseTransaccion(payload);
         if (maybe != null) {
             handleTransaccion(maybe);
             return;
         }
-        // Si no es JSON válido de Transaccion, se queda como texto
         System.out.println("[x] Received byte[] could not be parsed as Transaccion; treating as text: '" + payload + "'");
     }
 

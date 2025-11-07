@@ -12,31 +12,39 @@ import com.rabbitmq.tutorial.runner.TutorialRabbitMqRunner;
 /**
  * Clase principal de arranque de la aplicación.
  *
- * Contiene el método main y algunos beans de ayuda para mostrar mensajes
- * de uso y ejecutar el runner del tutorial. Se habilita el soporte de
- * scheduling para permitir que el componente Sender envíe mensajes
- * periódicamente mediante @Scheduled.
+ * Habilita scheduling para el emisor y define beans de ayuda que muestran
+ * un mensaje de uso o ejecutan el runner del tutorial. Los componentes
+ * que interactúan con RabbitMQ están controlados por los perfiles:
+ * - 'sender' para el emisor
+ * - 'receiver' para el receptor
  */
 @SpringBootApplication
 @EnableScheduling
 public class TutorialRabbitMqApplication {
 
     /**
-     * Bean que se activa únicamente si no se incluyen los argumentos necesarios
+     * Bean que muestra instrucciones cuando el perfil por defecto 'usage_message' está activo.
      */
     @Profile("usage_message")
     @Bean
     CommandLineRunner usage() {
         return args -> {
-            System.out.println("Forma de ejecutar la aplicación:");
-            System.out.println("java -jar rabbit-tutorials.jar --spring.profiles.active=hello-world,sender");
+            System.out.println("-- TUTORIAL_RABBITMQ_1 AUX APP --");
+            System.out.println("Para ejecutar la app, use uno de los siguientes perfiles:");
+            System.out.println("  'sender'   : para ejecutar el componente que envía mensajes.");
+            System.out.println("  'receiver' : para ejecutar el componente que recibe mensajes.");
+            System.out.println("Puede combinar ambos perfiles para ejecutar un cliente completo.\n");
+            System.out.println("Ejecuciones de ejemplo:");
+            System.out.println("java -jar tutorial-rabbitmq.jar --spring.profiles.active=sender,receiver");
+            System.out.println("java -jar tutorial-rabbitmq.jar --spring.profiles.active=sender");
+            System.out.println("java -jar tutorial-rabbitmq.jar --spring.profiles.active=receiver");
         };
     }
 
     /**
      * Bean que arranca el runner del tutorial cuando no está activo el perfil
-     * "usage_message". El runner mantiene la aplicación vivo durante el
-     * tiempo configurado en properties y después cierra el contexto.
+     * "usage_message". Mantiene la aplicación viva durante la duración
+     * configurada y después cierra el contexto.
      */
     @Profile("!usage_message")
     @Bean

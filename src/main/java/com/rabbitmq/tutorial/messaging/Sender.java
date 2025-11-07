@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,12 +17,12 @@ import com.rabbitmq.tutorial.model.Transaccion;
 import java.time.LocalDateTime;
 
 /**
- * Componente que envía mensajes a la cola RabbitMQ.
+ * Emisor de mensajes (activo solo con el perfil 'sender').
  *
- * Ahora envía objetos Transaccion usando la exchange delayed (plugin) y el header
- * x-delay para especificar el retardo por mensaje. También usa el ObjectMapper
- * compartido (bean) para serializar LocalDateTime correctamente.
+ * Envía periódicamente objetos Transaccion a la exchange "delayed.exchange"
+ * estableciendo el header "x-delay" para controlar el retardo por mensaje.
  */
+@Profile("sender")
 @Component
 public class Sender {
 
@@ -39,13 +40,11 @@ public class Sender {
     @Value("${tutorial.client.delayMs:10000}")
     private Integer delayMs;
 
-    // Nombre de la exchange configurada para delayed messages
     private static final String DELAYED_EXCHANGE = "delayed.exchange";
     private static final String HELLO_ROUTING_KEY = "hello";
 
     /**
-     * Tarea periódica que envía mensajes cada segundo (configurado en el método)
-     * Envía primero un texto y después un objeto Transaccion serializado a JSON.
+     * Tarea periódica que envía un objeto Transaccion cada segundo.
      */
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
     public void send() {
@@ -100,10 +99,8 @@ public class Sender {
             return message;
         };
 
-        // Enviar a la exchange delayed; la binding con routing key 'hello' entregará a la cola 'hello' tras el delay
         this.template.convertAndSend(DELAYED_EXCHANGE, HELLO_ROUTING_KEY, t, mpp);
 
-        // Usar el ObjectMapper compartido para el log (tiene JavaTimeModule registrado)
         return objectMapper.writeValueAsString(t);
     }
 }

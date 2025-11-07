@@ -2,27 +2,24 @@
 
 spring:
   profiles:
-    # Perfil activo por defecto. En este proyecto se usa "usage_message" para
-    # mostrar instrucciones en lugar de ejecutar el tutorial completo.
+    # Perfil por defecto: muestra instrucciones en lugar de ejecutar el tutorial
     active: usage_message
   rabbitmq:
-    # Ajustes de conexión a RabbitMQ.
+    # Conexión a RabbitMQ
     host: localhost
     port: 5672
     username: guest
     password: guest
 
-logging:
-  level:
-    # Nivel de logging para el paquete org (reduce ruido en consola)
-    org: ERROR
+# Reducir ruido de logs del paquete org
+#logging:
+#  level:
+#    org: ERROR
 
-# Propiedades específicas del tutorial usadas por TutorialRabbitMqRunner
+# Propiedades usadas por TutorialRabbitMqRunner
 tutorial:
   client:
-    # Duración (ms) que el runner mantiene la aplicación en ejecución antes
-    # de cerrarla automáticamente; por defecto 10000 ms (10 segundos) en el ejemplo.
+    # Duración (ms) que la aplicación permanece en ejecución antes de cerrarse
     duration: 10000
-    # Retardo (ms) que el sender aplicará al header x-delay cuando publique
-    # mensajes a la exchange delayed.exchange. Se puede ajustar aquí.
+    # Retardo (ms) que aplicará el emisor mediante el header x-delay
     delayMs: 5000

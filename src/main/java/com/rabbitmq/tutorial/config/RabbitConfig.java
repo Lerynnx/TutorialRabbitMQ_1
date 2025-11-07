@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Configuración de RabbitMQ para la aplicación.
+ * Configuración de RabbitMQ y beans relacionados.
  *
  * Esta clase registra:
  * - Un convertidor JSON basado en Jackson (para serializar/deserializar mensajes).

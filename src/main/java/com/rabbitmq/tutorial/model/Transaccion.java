@@ -41,6 +41,7 @@ public class Transaccion {
 		this.estado_id = estado_id;
 	}
 
+	
 	public Integer getId() {
 		return id;
 	}
