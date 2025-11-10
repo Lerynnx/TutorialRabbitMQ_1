@@ -114,6 +114,14 @@ public class RabbitConfig {
         return new CustomExchange("delayed.exchange", "x-delayed-message", true, false, args);
     }
 
+    /**
+	 * Binding entre la cola "hello" y la exchange "delayed.exchange"
+	 * usando la routing key "hello".
+	 *
+	 * @param delayedExchange la exchange retrasada
+	 * @param helloQueue la cola "hello"
+	 * @return Binding configurado
+	 */
     @Bean
     public Binding bindingDelayedToHello(CustomExchange delayedExchange, Queue helloQueue) {
         return BindingBuilder.bind(helloQueue).to(delayedExchange).with("hello").noargs();

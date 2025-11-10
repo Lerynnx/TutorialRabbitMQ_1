@@ -4,21 +4,13 @@ import java.time.LocalDateTime;
 
 public class Transaccion {
 	private Integer id;
-	
 	private String clave_indempotencia;
-	
 	private String id_correlacion;
-	
 	private Integer id_cuenta_emisor;
-	
 	private Integer id_cuenta_receptor;
-	
 	private Float cantidad;
-	
 	private LocalDateTime fecha_creacion;
-	
 	private LocalDateTime fecha_actualizacion;
-	
 	private String estado_id;
 
 	
