@@ -84,14 +84,12 @@ public class Sender {
     private String sendTransaccionMessage() throws JsonProcessingException {
         Transaccion t = new Transaccion(
                 1,
-                "clave-123",
-                "corr-1",
                 1001,
                 2002,
                 250.75f,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "CREADA"
+                (short) 1
         );
         // Mensaje post-processor para establecer header x-delay (en ms) usando la propiedad configurable
         MessagePostProcessor mpp = message -> {

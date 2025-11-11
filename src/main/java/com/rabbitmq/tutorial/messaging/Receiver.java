@@ -81,8 +81,8 @@ public class Receiver {
     private void handleTransaccion(Transaccion t) {
         System.out.println("[x] Received Transaccion: id=" + t.getId()
                 + ", cantidad=" + t.getCantidad()
-                + ", emisor=" + t.getId_cuenta_emisor()
-                + ", receptor=" + t.getId_cuenta_receptor());
+                + ", emisor=" + t.getCuenta_emisor_id()
+                + ", receptor=" + t.getCuenta_receptor_id());
     }
 
     /**
